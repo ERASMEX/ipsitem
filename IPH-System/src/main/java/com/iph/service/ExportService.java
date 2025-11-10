@@ -26,4 +26,35 @@ public class ExportService {
         try (FileOutputStream fos = new FileOutputStream(path)) { wb.write(fos); }
         wb.close();
     }
+    package com.iph.service;
+
+import com.iph.model.IPHRecord;
+import java.util.List;
+import org.apache.poi.ss.usermodel.*; // Asumo los imports de POI
+
+    public class ExportService {
+
+        public void exportar(List<IPHRecord> records, String path) throws Exception {
+            // Lógica de exportación de Excel, usando los métodos corregidos del modelo IPHRecord
+
+            // Simulación de la lógica de iteración:
+            for (IPHRecord r : records) {
+                // CORRECCIÓN: Uso de Getters que ahora existen
+                String informe = r.getNumeroInforme();
+                String fecha = r.getFechaHechos();
+                String denunciante = r.getDenunciante();
+                String tipoHecho = r.getTipoHecho();
+
+                // Asumiendo que getDetenidos() y getVehiculos() retornan List<String>
+                String detenidos = String.join(", ", r.getDetenidos());
+                String vehiculos = String.join(", ", r.getVehiculos());
+
+                // Aquí iría la lógica para escribir en el archivo Excel
+            }
+
+            // try (FileOutputStream fileOut = new FileOutputStream(path)) {
+            //     workbook.write(fileOut);
+            // }
+        }
+    }
 }

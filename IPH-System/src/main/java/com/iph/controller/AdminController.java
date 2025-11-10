@@ -58,13 +58,12 @@ public class AdminController extends Controller {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             String path = fileChooser.getSelectedFile().getAbsolutePath();
-            // Llama al método con la firma correcta
             exportarAuditoria(path);
         }
     }
 
     // Método con firma de String para lógica de negocio
-    public void exportarAuditoria(String path) {
+    private void exportarAuditoria(String path) {
         try {
             auditService.exportarExcel(path);
             JOptionPane.showMessageDialog(null, "Auditoría exportada exitosamente a: " + path);
@@ -75,7 +74,6 @@ public class AdminController extends Controller {
 
     // Soluciona: cannot find symbol method limpiarLogsAntiguos
     public void limpiarLogsAntiguos() {
-        // Asumo 90 días por defecto
         int dias = 90;
         try {
             auditService.eliminarAntiguos(dias);

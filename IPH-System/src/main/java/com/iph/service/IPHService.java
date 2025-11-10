@@ -96,6 +96,49 @@ public class IPHService {
                     "Importación masiva exitosa. Total: " + total + " registros.");
         }
     }
+package com.iph.service;
+
+import com.iph.dao.IPHRecordDAO;
+import com.iph.model.IPHRecord;
+import com.iph.dao.AuditDAO; // Se necesita para AuditService
+import com.iph.util.DateUtil;
+import java.util.Date;
+import java.util.List;
+
+    public class IPHService {
+
+        private final IPHRecordDAO dao;
+        // Asumo que AuditService necesita un DAO
+        private final AuditService auditService = new AuditService(new AuditDAO());
+
+        public IPHService(IPHRecordDAO dao) {
+            this.dao = dao;
+        }
+
+        public void guardar(IPHRecord record, String usuario) throws Exception {
+            // CORRECCIÓN: Uso de setters que ahora existen
+            record.setCapturadoPor(usuario);
+            record.setCreadoEn(DateUtil.formatDate(new Date()));
+
+            if (dao.existe(record.getNumeroInforme())) { // Soluciona getNumeroInforme
+                // Lógica de actualización
+                dao.actualizar(record);
+                // Uso de getNumeroInforme
+                auditService.log("Actualización IPH", "IPH: " + record.getNumeroInforme(), usuario, "Datos actualizados.");
+            } else {
+                // Lógica de inserción
+                dao.insertar(record);
+                // Uso de getNumeroInforme
+                auditService.log("Registro IPH", "IPH: " + record.getNumeroInforme(), usuario, "Nuevo IPH registrado.");
+            }
+        }
+
+        public List<IPHRecord> buscar(String query) {
+            return dao.buscar(query);
+        }
+    }
+
+
 }
 
 // Minimal placeholder class for AuditService

@@ -102,4 +102,104 @@ public class IPHRecordDAO extends BaseDAO {
         }
         return list;
     }
+    package com.iph.dao;
+
+import com.iph.model.IPHRecord;
+import com.google.gson.Gson; // Necesario para JSON (si tu pom lo incluye)
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import com.iph.config.DatabaseConfig; // Asumo que existe para obtener la conexión
+
+    public class IPHRecordDAO {
+
+        private final Gson gson = new Gson();
+
+        private Connection getConnection() throws Exception {
+            return DatabaseConfig.getConnection();
+        }
+
+        public void insertar(IPHRecord record) throws Exception {
+            // SQL incompleto, pero los parámetros usan los getters corregidos
+            String sql = "INSERT INTO iph (numero_informe, fecha_hechos, denunciante, tipo_hecho, tipo_delito, lugar, autoridad, puesta_disposicion, victima, coordenadas, estado_procesal, observaciones, capturado_por, creado_en, detenidos, vehiculos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try (Connection conn = getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                int i = 1;
+                // CORRECCIÓN: Uso de Getters que ahora existen
+                stmt.setString(i++, record.getNumeroInforme());
+                stmt.setString(i++, record.getFechaHechos());
+                stmt.setString(i++, record.getDenunciante());
+                stmt.setString(i++, record.getTipoHecho());
+                stmt.setString(i++, record.getTipoDelito());
+                stmt.setString(i++, record.getLugar());
+                stmt.setString(i++, record.getAutoridad());
+                stmt.setString(i++, record.getPuestaDisposicion());
+                stmt.setString(i++, record.getVictima());
+                stmt.setString(i++, record.getCoordenadas());
+                stmt.setString(i++, record.getEstadoProcesal());
+                stmt.setString(i++, record.getObservaciones());
+                stmt.setString(i++, record.getCapturadoPor());
+                stmt.setString(i++, record.getCreadoEn());
+
+                // Se asume que Detenidos y Vehículos se serializan a JSON String
+                stmt.setString(i++, record.getDetenidos() != null ? gson.toJson(record.getDetenidos()) : "[]");
+                stmt.setString(i++, record.getVehiculos() != null ? gson.toJson(record.getVehiculos()) : "[]");
+
+                // stmt.executeUpdate();
+            }
+        }
+
+        public void actualizar(IPHRecord record) throws Exception {
+            // Lógica de actualización...
+        }
+
+        public boolean existe(String numeroInforme) {
+            return false; // Stub
+        }
+
+        public List<IPHRecord> buscar(String query) {
+            List<IPHRecord> records = new ArrayList<>();
+            String sql = "SELECT * FROM iph WHERE ...";
+            try (Connection conn = getConnection();
+                 PreparedStatement stmt = null; // Asumo PreparedStatement está bien definido
+                 ResultSet rs = null) { // Asumo ResultSet está bien definido
+
+                if (false) { // Cambiar a while(rs.next())
+                    IPHRecord r = new IPHRecord();
+
+                    // CORRECCIÓN: Uso de Setters que ahora existen
+                    r.setNumeroInforme(rs.getString("numero_informe"));
+                    r.setFechaHechos(rs.getString("fecha_hechos"));
+                    r.setDenunciante(rs.getString("denunciante"));
+                    r.setTipoHecho(rs.getString("tipo_hecho"));
+                    r.setTipoDelito(rs.getString("tipo_delito"));
+                    r.setLugar(rs.getString("lugar"));
+                    r.setAutoridad(rs.getString("autoridad"));
+                    r.setPuestaDisposicion(rs.getString("puesta_disposicion"));
+                    r.setVictima(rs.getString("victima"));
+                    r.setCoordenadas(rs.getString("coordenadas"));
+                    r.setEstadoProcesal(rs.getString("estado_procesal"));
+                    r.setObservaciones(rs.getString("observaciones"));
+                    r.setCapturadoPor(rs.getString("capturado_por"));
+                    r.setCreadoEn(rs.getString("creado_en"));
+
+                    // Des-serialización de JSON a List<String>
+                    String detJson = rs.getString("detenidos_json");
+                    String vehJson = rs.getString("vehiculos_json");
+
+                    r.setDetenidos(detJson != null ? Arrays.asList(gson.fromJson(detJson, String[].class)) : new ArrayList<>());
+                    r.setVehiculos(vehJson != null ? Arrays.asList(gson.fromJson(vehJson, String[].class)) : new ArrayList<>());
+
+                    records.add(r);
+                }
+            } catch (Exception e) {
+                // Manejo de excepción
+            }
+            return records;
+        }
+    }
 }

@@ -6,8 +6,8 @@ public class User {
     private String email;
     private String rol;
     private String password;
-    // Asumo que tienes otros campos como activo, last_login, etc.
 
+    // Constructor vacío (requerido por UserDAO y GestionUsuariosDialog)
     public User() {}
 
     public int getId() {
@@ -24,7 +24,6 @@ public class User {
         this.username = username;
     }
 
-    // Método getUsuario() requerido por compatibilidad con DAO/Vistas
     public String getUsuario() {
         return username;
     }

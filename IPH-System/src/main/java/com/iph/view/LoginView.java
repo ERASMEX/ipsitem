@@ -53,4 +53,52 @@ public class LoginView extends JFrame {
                 new String(txtPassword.getPassword())
         );
     }
+    package com.iph.view;
+
+import com.iph.controller.LoginController;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+    public class LoginView extends JFrame {
+
+        private final LoginController controller;
+        private JTextField txtUsername;
+        private JPasswordField txtPassword;
+
+        public LoginView(LoginController controller) {
+            this.controller = controller;
+            setTitle("Acceso IPH System");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(400, 300);
+            setLocationRelativeTo(null);
+
+            txtUsername = new JTextField(15);
+            txtPassword = new JPasswordField(15);
+            JButton btnLogin = new JButton("Login");
+
+            btnLogin.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String username = txtUsername.getText();
+                    String password = new String(txtPassword.getPassword());
+
+                    // CORRECCIÓN: Cambio a 'authenticate' para coincidir con el controlador
+                    // Soluciona: cannot find symbol method intentarLogin
+                    controller.authenticate(username, password);
+                }
+            });
+
+            // Simulación de la UI
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.add(new JLabel("Usuario:"));
+            panel.add(txtUsername);
+            panel.add(new JLabel("Contraseña:"));
+            panel.add(txtPassword);
+            panel.add(btnLogin);
+
+            this.add(panel);
+        }
+    }
 }

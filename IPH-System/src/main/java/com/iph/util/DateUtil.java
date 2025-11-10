@@ -2,11 +2,10 @@ package com.iph.util;
 
 import org.apache.poi.ss.usermodel.DateUtil;
 import java.util.Date;
-import java.text.SimpleDateFormat; // Requerido para formatDate
+import java.text.SimpleDateFormat;
 
 /**
- * Utilidad para manejo de fechas
- * Soluciona: Duplicidad (asegúrate de que solo exista este archivo) y falta de formatDate
+ * Utilidad para manejo de fechas.
  */
 public class DateUtil {
 

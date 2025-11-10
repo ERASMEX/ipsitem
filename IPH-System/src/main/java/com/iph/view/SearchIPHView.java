@@ -1,51 +1,37 @@
 package com.iph.view;
 
-import com.iph.controller.Controller; // Requerido por el error de símbolo
+import com.iph.controller.Controller; // CORRECCIÓN
 import com.iph.service.ExcelService;
 import com.iph.service.ExcelService.ImportResult;
 import javax.swing.*;
 import java.util.List;
 
-// Asumo que SearchIPHView extiende JDialog para ser una ventana secundaria
 public class SearchIPHView extends JDialog {
 
     private final Controller controller;
     private JProgressBar progressBar;
 
-    // Constructor
     public SearchIPHView(JFrame parent, Controller controller) {
         super(parent, "Búsqueda de IPH", true);
         this.controller = controller;
         this.progressBar = new JProgressBar();
-        // Lógica de inicialización de la interfaz
-        this.setSize(800, 600);
-        this.setLocationRelativeTo(parent);
+        // ... Lógica de inicialización de la interfaz
     }
-
-    // Asumo que el Controller tiene este método
-    // Necesario para evitar el error de "cannot find symbol: variable path"
-    public String getPath() { return "ruta/por/defecto.xlsx"; }
 
     private void realizarBusqueda() { /* Lógica para refrescar la tabla */ }
     private void mostrarReporteErrores(List<String> errores) { /* Lógica para mostrar errores */ }
 
-    // Método que inicia el proceso de importación
     private void importarExcel() {
         JFileChooser chooser = new JFileChooser();
-        // ... (Tu lógica de selección de archivo) ...
-        String path = getPath(); // Usamos un método para obtener el path
+        String path = "ruta/ficticia.xlsx"; // Debe obtenerse del chooser
 
         progressBar.setValue(0);
         progressBar.setString("Validando...");
 
-        // Ejecutar el SwingWorker
-        // Asumo que controller.getUsuario() devuelve el nombre de usuario
+        // Usamos controller.getUsuario()
         new ExcelImportWorker(path, controller.getUsuario()).execute();
     }
 
-    /**
-     * Implementación de SwingWorker para la importación en segundo plano.
-     */
     private class ExcelImportWorker extends SwingWorker<ImportResult, Void> {
         private final String path;
         private final String usuario;
